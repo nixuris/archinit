@@ -10,7 +10,7 @@ Grab the script with:
 
 
 ```
-curl -O https://raw.githubusercontent.com/DanteAKD/Archinstall/main/arch-install.sh
+curl https://raw.githubusercontent.com/DanteAKD/Archinstall/main/arch-install.sh -o arch-install.sh
 ```
 
 Then make it executable:
