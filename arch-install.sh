@@ -110,15 +110,6 @@ echo "Enabling essential services (NetworkManager and fstrim.timer)..."
 systemctl enable NetworkManager fstrim.timer
 
 ###############################################
-# Install paru (AUR Helper)
-###############################################
-echo "Installing paru for AUR..."
-cd /home/"$username"
-sudo -u "$username" git clone https://aur.archlinux.org/paru.git
-cd paru
-sudo -u "$username" makepkg -si
-
-###############################################
 # Set Fish as Default Shell for Root and User
 ###############################################
 echo "Setting fish as default shell for root and user '$username'..."
