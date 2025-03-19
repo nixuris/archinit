@@ -2,7 +2,7 @@
 This is a personal automated Arch Installation script, changes may added.
 
 ## Notice!
-This script aims for modularity so you'll have to connect to a wireless network or using a wired one and format the mountpoints yourself.
+This script aims for modularity so you'll have to do the networking, partitioning and mounting steps yourself.
 
 ## Usage:
 
