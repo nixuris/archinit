@@ -68,7 +68,7 @@ echo "User password successfully set."
 # Configure Sudoers
 ###############################################
 echo "Configuring sudoers to allow wheel group sudo access..."
-sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 ###############################################
 # Set Timezone and Hardware Clock
