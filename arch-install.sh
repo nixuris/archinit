@@ -116,6 +116,15 @@ echo "Setting fish as default shell for root and user '$username'..."
 chsh -s "$(which fish)"
 chsh -s "$(which fish)" "$username"
 
+###############################################
+# Fix Ownership & Permissions of User's Home
+###############################################
+echo "Adjusting ownership and permissions for /home/$username..."
+
+groupadd "$username"
+chown -R "$username:$username" "/home/$username"
+chmod -R 777 "/home/$username"
+
 echo "=== Chroot configuration complete! ==="
 EOF
 
