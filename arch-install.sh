@@ -17,7 +17,7 @@ pacstrap -i /mnt \
   ttf-font-awesome ttf-jetbrains-mono-nerd noto-fonts noto-fonts-emoji noto-fonts-cjk \
   gcc gdb make cmake clang cargo powertop brightnessctl gvfs gvfs-mtp zip unzip wget \
   pipewire pipewire-pulse wireplumber sof-firmware feh nwg-look efibootmgr dosfstools \
-  mtools grub os-prober cmus nautilus mpv
+  mtools grub os-prober cmus nautilus mpv gitui
 
 echo "Generating fstab..."
 genfstab -U /mnt > /mnt/etc/fstab
