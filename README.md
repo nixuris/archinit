@@ -24,3 +24,24 @@ Finally exec it:
 ```
 ./arch-install.sh
 ```
+
+## Post installation:
+
+You must clone the repository:
+
+```
+git clone https://github.com/DanteAKD/Archinstall.git
+```
+
+Make the post installation script executable:
+
+```
+cd Archinstall
+sudo chmod +x post-install.sh
+```
+
+Run the script:
+
+```
+sudo ./post-install.sh
+```
