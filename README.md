@@ -6,11 +6,17 @@ This script aims for modularity so you'll have to do the networking, partitionin
 
 ## Usage:
 
-Grab the script with:
+If you want to change some part of the script.
 
+Grab the script with:
 
 ```
 curl https://raw.githubusercontent.com/DanteAKD/Archinstall/main/arch-install.sh -o arch-install.sh
+```
+Review it with your editor of choice, example nano:
+
+```
+nano arch-install.sh
 ```
 
 Then make it executable:
@@ -23,6 +29,12 @@ Finally exec it:
 
 ```
 ./arch-install.sh
+```
+
+If you've reviewed the script and see the options suit to your use case, run it directly:
+
+```
+curl -fsSL https://raw.githubusercontent.com/DanteAKD/Archinstall/main/arch-install.sh | bash
 ```
 
 ## Post installation:
