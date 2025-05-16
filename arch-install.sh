@@ -15,9 +15,9 @@ pacstrap -i /mnt \
   base base-devel linux linux-firmware git sudo fastfetch neovim \
   bluez bluez-utils networkmanager htop intel-ucode fish alacritty \
   ttf-font-awesome ttf-jetbrains-mono-nerd noto-fonts noto-fonts-emoji noto-fonts-cjk \
-  gcc gdb make cmake clang cargo powertop brightnessctl gvfs gvfs-mtp zip unzip wget \
-  pipewire pipewire-pulse wireplumber sof-firmware feh nwg-look efibootmgr dosfstools \
-  mtools grub os-prober cmus nautilus mpv gitui ranger fcitx5 fcitx5-unikey fcitx5-configtool fcitx5-gtk kwindowsystem
+  gcc gdb make cmake clang cargo powertop brightnessctl zip unzip wget \
+  pipewire pipewire-pulse wireplumber sof-firmware nwg-look efibootmgr dosfstools \
+  mtools grub os-prober gitui ranger fcitx5 fcitx5-unikey fcitx5-configtool fcitx5-gtk kwindowsystem
 
 echo "Generating fstab..."
 genfstab -U /mnt > /mnt/etc/fstab
