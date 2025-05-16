@@ -13,7 +13,7 @@ If you want to change some part of the script.
 Grab the script with:
 
 ```
-curl https://raw.githubusercontent.com/DanteAKD/Archinstall/main/arch-install.sh -o arch-install.sh
+curl https://raw.githubusercontent.com/nixuris/Archinstall/main/arch-install.sh -o arch-install.sh
 ```
 Review it with your editor of choice, example nano:
 
@@ -36,7 +36,7 @@ Finally exec it:
 If you've reviewed the script and see the options suit to your use case, run it directly:
 
 ```
-curl -fsSL https://raw.githubusercontent.com/DanteAKD/Archinstall/main/arch-install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nixuris/Archinstall/main/arch-install.sh | bash
 ```
 
 ## Post installation:
