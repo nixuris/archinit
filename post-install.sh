@@ -18,11 +18,8 @@ pacman -Syu --noconfirm
 ###############################################
 # 2. Install flatpak and paru (Optional)
 ###############################################
-read -p "Install flatpak and paru? [Y/N]: " install_paru_choice
+read -p "Install paru? [Y/N]: " install_paru_choice
 if [[ "$install_paru_choice" =~ ^[Yy]$ ]]; then
-  echo "Installing flatpak..."
-  pacman -S --noconfirm flatpak
-
   # Store the original working directory so we can return here later
   ORIG_PWD="$(pwd)"
 
@@ -68,14 +65,31 @@ if [[ "$install_additional_choice" =~ ^[Yy]$ ]]; then
   if command -v paru &>/dev/null; then
     echo "Installing AUR packages with paru..."
     paru -S --noconfirm --needed \
-      obs-vaapi wlrobs visual-studio-code-bin zen browser-bin cmatrix-git zoom obsidian
+      #System
+      htop atool zip unzip 7zip usbutils  \
+      #Mounting
+      usbmuxd libimobiledevice android-tools udiskie udisks2 jmtpfs \
+      #Power
+      powertop tlp \
+      #Asus
+      asusctl supergfxctl \
+      #Theme
+      papirus-icon-theme catppuccin-gtk-theme-frappe nwg-look bibata-cursor-theme \
+      #OBS
+      obs-vaapi wlrobs obs-studio \
+      #Media
+      mpv ani-cli gstreamer-vaapi cmus nicotine+ imv \
+      #Dev
+      visual-studio-code-bin obsidian gitui git-filter-repo nodejs pnpm eslint prettier python python-pip python-virtualenv \
+      #Social and browsing
+      zen browser-bin vesktop-bin \
+      #Others
+      cmatrix-git zoom pavucontrol blueman libreoffice-fresh
   else
     echo "paru not found. Skipping AUR packages..."
   fi
-
-  echo "Installing packages with pacman..."
-  pacman -S --noconfirm --needed \
-    pavucontrol tlp blueman gstreamer-vaapi obs-studio
+  systemctl enable usbmuxd
+  systemctl enable supergfxd
 fi
 
 ###############################################
