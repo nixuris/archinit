@@ -84,7 +84,17 @@ if [[ "$install_additional_choice" =~ ^[Yy]$ ]]; then
 fi
 
 ###############################################
-# 4. DNS Configuration with 1.1.1.1 (Optional)
+# 4. Installing NVIDIA driver (Optional)
+###############################################
+
+read -p "Install NVIDIA driver? [Y/N]: " install_driver
+if [[ "$install_driver" =~ ^[Yy]$ ]]; then
+    echo "Installing NVIDIA driver..."
+    pacman -S --noconfirm --needed nvidia nvidia-utils
+fi
+
+###############################################
+# 5. DNS Configuration with 1.1.1.1 (Optional)
 ###############################################
 read -p "Use 1.1.1.1 DNS (DNSOverTLS)? [Y/N]: " dns_choice
 if [[ "$dns_choice" =~ ^[Yy]$ ]]; then
@@ -106,7 +116,7 @@ EOF
 fi
 
 ###############################################
-# 5. Enable TLP and Powertop (Optional)
+# 6. Enable TLP and Powertop (Optional)
 ###############################################
 read -p "Enable TLP and Powertop services? [Y/N]: " power_choice
 if [[ "$power_choice" =~ ^[Yy]$ ]]; then
