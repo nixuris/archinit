@@ -62,28 +62,19 @@ fi
 ###############################################
 read -p "Install additional packages? [Y/N]: " install_additional_choice
 if [[ "$install_additional_choice" =~ ^[Yy]$ ]]; then
+  read -p "Enter username: " username </dev/tty
   if command -v paru &>/dev/null; then
     echo "Installing AUR packages with paru..."
-    paru -S --noconfirm --needed \
-      #System
+    sudo -u "$username" paru -S --noconfirm --needed \
       htop atool zip unzip 7zip usbutils  \
-      #Mounting
       usbmuxd libimobiledevice android-tools udiskie udisks2 jmtpfs \
-      #Power
       powertop tlp \
-      #Asus
       asusctl supergfxctl \
-      #Theme
       papirus-icon-theme catppuccin-gtk-theme-frappe nwg-look bibata-cursor-theme \
-      #OBS
       obs-vaapi wlrobs obs-studio \
-      #Media
       mpv ani-cli gstreamer-vaapi cmus nicotine+ imv \
-      #Dev
       visual-studio-code-bin obsidian gitui git-filter-repo nodejs pnpm eslint prettier python python-pip python-virtualenv \
-      #Social and browsing
-      zen browser-bin vesktop-bin \
-      #Others
+      zen-browser-bin vesktop-bin \
       cmatrix-git zoom pavucontrol blueman libreoffice-fresh
   else
     echo "paru not found. Skipping AUR packages..."
