@@ -36,7 +36,7 @@ Finally exec it:
 If you've reviewed the script and see the options suit to your use case, run it directly:
 
 ```
-curl -fsSL https://raw.githubusercontent.com/nixuris/Archinstall/main/arch-install.sh | bash
+bash<(curl -fsSL https://raw.githubusercontent.com/nixuris/Archinstall/main/arch-install.sh)
 ```
 
 ## Post installation:
