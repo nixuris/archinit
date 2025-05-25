@@ -69,7 +69,7 @@ if [[ "$install_additional_choice" =~ ^[Yy]$ ]]; then
       htop atool zip unzip 7zip usbutils  \
       usbmuxd libimobiledevice android-tools udiskie udisks2 jmtpfs \
       powertop tlp \
-      asusctl supergfxctl \
+      asusctl supergfxctl rog-control-center \
       papirus-icon-theme catppuccin-gtk-theme-frappe nwg-look bibata-cursor-theme \
       obs-vaapi wlrobs obs-studio \
       mpv ani-cli gstreamer-vaapi cmus nicotine+ imv \
