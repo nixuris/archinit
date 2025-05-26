@@ -75,7 +75,7 @@ if [[ "$install_additional_choice" =~ ^[Yy]$ ]]; then
       mpv ani-cli gstreamer-vaapi cmus nicotine+ imv \
       visual-studio-code-bin obsidian gitui git-filter-repo nodejs pnpm eslint prettier python python-pip python-virtualenv \
       zen-browser-bin vesktop-bin \
-      cmatrix-git zoom pavucontrol blueman libreoffice-fresh
+      cmatrix-git zoom pavucontrol blueman onlyoffice-bin
   else
     echo "paru not found. Skipping AUR packages..."
   fi
