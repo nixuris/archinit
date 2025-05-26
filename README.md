@@ -6,6 +6,8 @@ This is a personal automated Arch Installation script, changes may added.
 ## Notice!
 This script aims for modularity so you'll have to do the networking, partitioning and mounting steps yourself.
 
+It also contains choices like chmod 777 your user directory, review before usage!
+
 ## Usage:
 
 If you want to change some part of the script.
