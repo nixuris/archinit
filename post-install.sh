@@ -18,36 +18,36 @@ pacman -Syu --noconfirm
 ###############################################
 # 2. Install paru (Optional)
 ###############################################
-read -p "Install paru? [Y/N]: " install_paru_choice
+read -p "Install paru? (required unless you already have paru) [Y/N]: " install_paru_choice
 if [[ "$install_paru_choice" =~ ^[Yy]$ ]]; then
   read -p "Enter username: " username </dev/tty
-  # Store the original working directory so we can return here later
+  # Store the original working directory
   ORIG_PWD="$(pwd)"
 
-  # Clone paru into /tmp/paru
-  echo "Cloning paru repository into /tmp/paru..."
-  rm -rf /tmp/paru 2>/dev/null || true
-  git clone https://aur.archlinux.org/paru.git /tmp/paru
+  # Clone paru into ~/paru
+  echo "Cloning paru repository into ~/paru..."
+  rm -rf /home/"$username"/paru 2>/dev/null || true
+  sudo -u "$username" git clone https://aur.archlinux.org/paru.git /home/"$username"/paru
 
   # Build and install paru
-  cd /tmp/paru
+  cd /home/"$username"/paru
   echo "Building and installing paru..."
   sudo -u "$username" makepkg -si --noconfirm
   # Return to original directory
   cd "$ORIG_PWD"
-  rm -rf /tmp/paru
+  rm -rf /home/"$username"/paru
 
   # Check if paru is installed
   if ! command -v paru &>/dev/null; then
     echo "paru installation failed or wasn't found in PATH. Trying once more..."
     
     # Try building again
-    git clone https://aur.archlinux.org/paru.git /tmp/paru
-    cd /tmp/paru
+    sudo -u "$username" git clone https://aur.archlinux.org/paru.git /home/"$username"/paru
+    cd /home/"$username"/paru
     sudo -u "$username" makepkg -si --noconfirm
     
     cd "$ORIG_PWD"
-    rm -rf /tmp/paru
+    rm -rf /home/"$username"/paru
 
     # Final check
     if ! command -v paru &>/dev/null; then
