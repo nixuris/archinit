@@ -16,10 +16,11 @@ echo "=== Updating the system (pacman -Syu) ==="
 pacman -Syu --noconfirm
 
 ###############################################
-# 2. Install flatpak and paru (Optional)
+# 2. Install paru (Optional)
 ###############################################
 read -p "Install paru? [Y/N]: " install_paru_choice
 if [[ "$install_paru_choice" =~ ^[Yy]$ ]]; then
+  read -p "Enter username: " username </dev/tty
   # Store the original working directory so we can return here later
   ORIG_PWD="$(pwd)"
 
@@ -31,8 +32,7 @@ if [[ "$install_paru_choice" =~ ^[Yy]$ ]]; then
   # Build and install paru
   cd /tmp/paru
   echo "Building and installing paru..."
-  makepkg -si --noconfirm
-
+  sudo -u "$username" makepkg -si --noconfirm
   # Return to original directory
   cd "$ORIG_PWD"
   rm -rf /tmp/paru
@@ -44,7 +44,7 @@ if [[ "$install_paru_choice" =~ ^[Yy]$ ]]; then
     # Try building again
     git clone https://aur.archlinux.org/paru.git /tmp/paru
     cd /tmp/paru
-    makepkg -si --noconfirm
+    sudo -u "$username" makepkg -si --noconfirm
     
     cd "$ORIG_PWD"
     rm -rf /tmp/paru
