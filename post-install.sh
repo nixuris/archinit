@@ -72,7 +72,7 @@ if [[ "$install_additional_choice" =~ ^[Yy]$ ]]; then
       asusctl supergfxctl rog-control-center \
       papirus-icon-theme catppuccin-gtk-theme-frappe nwg-look bibata-cursor-theme \
       obs-vaapi wlrobs obs-studio \
-      mpv ani-cli gstreamer-vaapi cmus nicotine+ imv \
+      mpv ani-cli gstreamer-vaapi kew foot nicotine+ easytag imv \
       visual-studio-code-bin obsidian gitui git-filter-repo nodejs pnpm eslint prettier python python-pip python-virtualenv \
       zen-browser-bin vesktop-bin \
       cmatrix-git zoom pavucontrol blueman onlyoffice-bin
