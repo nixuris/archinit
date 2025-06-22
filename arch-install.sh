@@ -123,7 +123,6 @@ echo "Adjusting ownership and permissions for /home/$username..."
 
 groupadd "$username"
 chown -R "$username:$username" "/home/$username"
-chmod -R 777 "/home/$username"
 
 echo "=== Chroot configuration complete! ==="
 EOF
