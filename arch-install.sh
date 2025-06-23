@@ -13,11 +13,10 @@ fi
 echo "=== Starting Base Installation ==="
 pacstrap -i /mnt \
   base base-devel linux linux-firmware git sudo fastfetch neovim \
-  bluez bluez-utils networkmanager htop intel-ucode fish \
-  ttf-font-awesome ttf-jetbrains-mono-nerd noto-fonts noto-fonts-emoji noto-fonts-cjk \
+  bluez bluez-utils networkmanager htop intel-ucode fish \ 
   gcc gdb make cmake clang cargo brightnessctl zip unzip wget \
   pipewire pipewire-pulse wireplumber sof-firmware efibootmgr dosfstools \
-  mtools grub os-prober ranger fcitx5 fcitx5-unikey fcitx5-configtool fcitx5-gtk kwindowsystem
+  mtools grub os-prober 
 
 echo "Generating fstab..."
 genfstab -U /mnt > /mnt/etc/fstab
