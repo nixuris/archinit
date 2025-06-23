@@ -13,7 +13,7 @@ fi
 echo "=== Starting Base Installation ==="
 pacstrap -i /mnt \
   base base-devel linux linux-firmware git sudo fastfetch neovim \
-  bluez bluez-utils networkmanager htop intel-ucode fish \ 
+  bluez bluez-utils networkmanager htop intel-ucode fish \
   gcc gdb make cmake clang cargo brightnessctl zip unzip wget \
   pipewire pipewire-pulse wireplumber sof-firmware efibootmgr dosfstools \
   mtools grub os-prober 
