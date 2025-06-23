@@ -16,7 +16,7 @@ real_user="${SUDO_USER:-$USER}"
 # 1. System Update
 ###############################################
 echo "=== Enabling multilib & updating system ==="
-sed -i '/^\[multilib\]/{s/^#//;n;s/^#//}' /etc/pacman.conf
+sed -i '/\[multilib\]/,/Include/ s/^#//' /etc/pacman.conf
 pacman -Syu --noconfirm
 
 ###############################################
@@ -24,15 +24,15 @@ pacman -Syu --noconfirm
 ###############################################
 read -rp "Install paru? [Y/N]: " install_paru
 if [[ $install_paru =~ ^[Yy]$ ]]; then
-  tmpdir="$(mktemp -d)"
-  echo "Cloning paru into $tmpdir..."
-  sudo -u "$real_user" git clone https://aur.archlinux.org/paru.git "$tmpdir"
-  pushd "$tmpdir" >/dev/null
-    echo "Building & installing paru..."
-    sudo -u "$real_user" makepkg -si --noconfirm
-  popd  >/dev/null
-  rm -rf "$tmpdir"
-  
+	build_dir=/tmp/paru-build
+	rm -rf "$build_dir"
+	echo "Cloning paru ..."
+	sudo -u "$real_user" git clone https://aur.archlinux.org/paru.git "$build_dir"
+	pushd "$build_dir" >/dev/null
+		echo "Building & installing paru ..."
+		sudo -u "$real_user" makepkg -si --noconfirm
+	popd >/dev/null
+	rm -rf "$build_dir"
   # double-check
   if ! command -v paru &>/dev/null; then
     echo "paru install failed. Exiting." >&2
