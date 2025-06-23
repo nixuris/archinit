@@ -12,7 +12,8 @@ fi
 ###############################################
 # 1. System Update
 ###############################################
-echo "=== Updating the system (pacman -Syu) ==="
+echo "=== Enable multilib repo and updating the system (pacman -Syu) ==="
+sed -i '/^\[multilib\]/{s/^#//;n;s/^#//}' /etc/pacman.conf
 pacman -Syu --noconfirm
 
 ###############################################
@@ -66,15 +67,16 @@ if [[ "$install_additional_choice" =~ ^[Yy]$ ]]; then
   if command -v paru &>/dev/null; then
     echo "Installing AUR packages with paru..."
     sudo -u "$username" paru -S --noconfirm --needed \
-      htop atool zip unzip 7zip usbutils  \
+      htop atool zip unzip 7zip usbutils ranger \
       usbmuxd libimobiledevice android-tools udiskie udisks2 jmtpfs \
       powertop tlp \
       asusctl supergfxctl rog-control-center \
-      papirus-icon-theme catppuccin-gtk-theme-frappe nwg-look bibata-cursor-theme \
+      fcitx5 fcitx5-unikey fcitx5-configtool fcitx5-gtk kwindowsystem \
       obs-vaapi wlrobs obs-studio \
       mpv ani-cli gstreamer-vaapi kew foot nicotine+ easytag imv \
       visual-studio-code-bin obsidian gitui git-filter-repo nodejs pnpm eslint prettier python python-pip python-virtualenv \
       zen-browser-bin vesktop-bin \
+      steam mangohud ttf-liberation \
       cmatrix-git zoom pavucontrol blueman onlyoffice-bin
   else
     echo "paru not found. Skipping AUR packages..."
@@ -118,7 +120,7 @@ fi
 ###############################################
 # 6. Enable TLP and Powertop (Optional)
 ###############################################
-read -p "Enable TLP and Powertop services? [Y/N]: " power_choice
+read -p "Enable TLP, Powertop services, Fstrim and disable some ? [Y/N]: " power_choice
 if [[ "$power_choice" =~ ^[Yy]$ ]]; then
   # Check if tlp.conf is present in current directory
   if [ -f tlp.conf ]; then
@@ -139,11 +141,43 @@ if [[ "$power_choice" =~ ^[Yy]$ ]]; then
   echo "Enabling tlp and powertop..."
   systemctl enable tlp
   systemctl enable powertop
+  systemctl enable fstrim
+  systemctl disable remote-fs.service
+  systemctl disable systemd-userdbd.socket
+  systemctl disable system-journal-gatewayd.socket
+  systemctl disable system-journal-remote.service
+  systemctl disable avahi-daemon.service
+  systemctl disable NetworkManager-wait-online.service
+  systemctl disable NetworkManager-dispatcher.service
 fi
 
 ###############################################
-# 6. Final Step: Reboot
+# 7. Set up ZRAM (Optional)
 ###############################################
+
+read -p "Enable ZRAM? [Y/N]: " zram_choice
+if [[ "$zram_choice" =~ ^[Yy]$ ]]; then
+  echo "=== Installing zram-generator ==="
+  pacman -Sy --noconfirm zram-generator
+
+  echo "=== Writing /etc/systemd/zram-generator.conf ==="
+  cat <<'EOF' > /etc/systemd/zram-generator.conf
+[zram0]
+# allocate up to 50% of RAM, capped at 4 GiB
+zram-size = min(ram / 2, 4096)
+compression-algorithm = zstd
+EOF
+
+  echo "=== Reloading systemd & enabling ZRAM swap service ==="
+  systemctl daemon-reload
+  systemctl enable --now systemd-zram-setup@zram0.service
+
+  echo "ZRAM swap is now enabled, dawg!"
+fi
+
+###############################################
+# 8. Final Step: Reboot
+###############################################
+
 echo "All steps complete. Rebooting now..."
 reboot
-
