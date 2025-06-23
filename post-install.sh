@@ -54,7 +54,7 @@ if [[ $install_pkgs =~ ^[Yy]$ ]]; then
       fcitx5 fcitx5-unikey fcitx5-configtool fcitx5-gtk \
       obs-vaapi wlrobs obs-studio mpv ani-cli gstreamer-vaapi \
       foot nicotine+ easytag imv visual-studio-code-bin obsidian \
-      gitui git-filter-repo nodejs pnpm eslint prettier \
+      gitui git-filter-repo nodejs pnpm eslint prettier terminus-font \
       python python-pip python-virtualenv zen-browser-bin \
       vesktop-bin steam mangohud ttf-liberation cmatrix-git \
       zoom pavucontrol blueman onlyoffice-bin
