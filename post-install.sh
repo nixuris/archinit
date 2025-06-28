@@ -73,7 +73,7 @@ fi
 ###############################################
 read -rp "Install NVIDIA driver? [Y/N]: " install_nvidia
 if [[ $install_nvidia =~ ^[Yy]$ ]]; then
-  pacman -S --noconfirm --needed nvidia nvidia-utils
+  pacman -S --noconfirm --needed nvidia-open nvidia-utils libva-nvidia-driver lib32-nvidia-utils
 fi
 
 ###############################################
