@@ -48,16 +48,14 @@ if [[ $install_pkgs =~ ^[Yy]$ ]]; then
   if command -v paru &>/dev/null; then
     echo "Installing additional packages with paru..."
     sudo -u "$real_user" paru -S --noconfirm --needed \
-      htop atool zip unzip 7zip usbutils ranger \
+      btop htop atool zip unzip 7zip usbutils ranger \
       usbmuxd libimobiledevice android-tools udiskie udisks2 jmtpfs \
       powertop tlp asusctl supergfxctl rog-control-center \
       fcitx5 fcitx5-unikey fcitx5-configtool fcitx5-gtk \
       obs-vaapi wlrobs obs-studio mpv ani-cli gstreamer-vaapi \
       foot nicotine+ easytag imv visual-studio-code-bin obsidian \
-      gitui git-filter-repo nodejs pnpm eslint prettier terminus-font \
-      python python-pip python-virtualenv zen-browser-bin \
       vesktop-bin steam mangohud ttf-liberation cmatrix-git \
-      zoom pavucontrol blueman onlyoffice-bin
+      zoom pavucontrol blueman onlyoffice-bin zen-browser-bin
   else
     echo "paru not found; skipping AUR installs."
   fi
@@ -69,15 +67,25 @@ if [[ $install_pkgs =~ ^[Yy]$ ]]; then
 fi
 
 ###############################################
-# 4. NVIDIA Driver (Optional)
+# 4. Dev (Optional)
+###############################################
+read -rp "Install some dev tools that I personally use? Uses fish as shell (git, gitui, python, nodejs, npm) [Y/N]: " install_dev
+if [[ $install_dev =~ ^[Yy]$ ]]; then
+  sudo -u "$real_user" paru -S --noconfirm --needed gitui git-filter-repo nodejs npm python python-pip python-virtualenv
+  read -rp "Set global installation as user wide for npm? (require fish shell) [Y/N]: " npm_user
+    if [[ $npm_user =~ ^[Yy]$ ]]; then
+      dev/npm-userwide.sh
+    fi
+fi
+###############################################
+# 5. NVIDIA Driver (Optional)
 ###############################################
 read -rp "Install NVIDIA driver? [Y/N]: " install_nvidia
 if [[ $install_nvidia =~ ^[Yy]$ ]]; then
   pacman -S --noconfirm --needed nvidia-open nvidia-utils libva-nvidia-driver lib32-nvidia-utils
 fi
-
 ###############################################
-# 5. DNS Over TLS w/ Cloudflare (Optional)
+# 6. DNS Over TLS w/ Cloudflare (Optional)
 ###############################################
 read -rp "Use Cloudflare DNS (1.1.1.1#one.one.one.one) with DNSOverTLS? [Y/N]: " dns_tls
 if [[ $dns_tls =~ ^[Yy]$ ]]; then
@@ -92,12 +100,12 @@ EOF
 fi
 
 ###############################################
-# 6. Power Services (Optional)
+# 7. Power Services (Optional)
 ###############################################
 read -rp "Enable TLP, Powertop, fstrim & disable some services? [Y/N]: " power_opt
 if [[ $power_opt =~ ^[Yy]$ ]]; then
-  [[ -f tlp.conf ]] && cp tlp.conf /etc/tlp.conf
-  [[ -f powertop.service ]] && cp powertop.service /etc/systemd/system/
+  [[ -f power/tlp.conf ]] && cp power/tlp.conf /etc/tlp.conf
+  [[ -f power/powertop.service ]] && cp power/powertop.service /etc/systemd/system/
   systemctl enable tlp powertop fstrim
   # disabling unnecessary ones
   for svc in remote-fs systemd-userdbd.socket system-journal-gatewayd.socket \
@@ -108,7 +116,7 @@ if [[ $power_opt =~ ^[Yy]$ ]]; then
 fi
 
 ###############################################
-# 7. ZRAM (Optional)
+# 8. ZRAM (Optional)
 ###############################################
 read -rp "Enable ZRAM swap? [Y/N]: " zram_opt
 if [[ $zram_opt =~ ^[Yy]$ ]]; then
@@ -123,8 +131,7 @@ EOF
 fi
 
 ###############################################
-# 8. Final Step
+# 9. Final Step
 ###############################################
 echo "All done. Rebooting now…"
 reboot
-
