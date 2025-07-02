@@ -74,7 +74,72 @@ if [[ $install_dev =~ ^[Yy]$ ]]; then
   sudo -u "$real_user" paru -S --noconfirm --needed gitui git-filter-repo nodejs npm python python-pip python-virtualenv
   read -rp "Set global installation as user wide for npm? (require fish shell) [Y/N]: " npm_user
     if [[ $npm_user =~ ^[Yy]$ ]]; then
-      dev/npm-userwide.sh
+      sudo -u "$real_user" bash <<'EONPM'
+# --- Configuration for User-Wide npm Setup ---
+NPM_GLOBAL_PREFIX="$HOME/.local"
+NPM_BIN_PATH="$NPM_GLOBAL_PREFIX/bin"
+NPM_LIB_PATH="$NPM_GLOBAL_PREFIX/lib/node_modules"
+FISH_CONFIG_DIR="$HOME/.config/fish"
+FISH_CONF_D_DIR="$FISH_CONFIG_DIR/conf.d"
+NPM_FISH_CONFIG_FILE="$FISH_CONF_D_DIR/npm.fish"
+# --------------------------------------------
+
+echo "Starting user-wide npm setup for Fish shell..."
+
+# Configure npm to use the user's local directory as prefix
+echo "Setting npm global prefix to '$NPM_GLOBAL_PREFIX'..."
+npm config set prefix "$NPM_GLOBAL_PREFIX"
+if [ $? -ne 0 ]; then
+    echo "Failed to set npm prefix. Aborting."
+    exit 1
+fi
+echo "npm prefix set successfully."
+
+# Create necessary directories
+echo "Creating necessary directories: $NPM_BIN_PATH and $NPM_LIB_PATH..."
+mkdir -p "$NPM_BIN_PATH" "$NPM_LIB_PATH"
+if [ $? -ne 0 ]; then
+    echo "Failed to create directories. Aborting."
+    exit 1
+fi
+echo "Directories created/ensured."
+
+# Create or update the npm.fish configuration for Fish shell
+echo "Creating/updating Fish shell config file: $NPM_FISH_CONFIG_FILE..."
+mkdir -p "$FISH_CONF_D_DIR"
+cat << EOF > "$NPM_FISH_CONFIG_FILE"
+# ~/.config/fish/conf.d/npm.fish
+
+# NPM User-Wide Global Package Configuration
+# This ensures global npm packages installed to ~/.local/bin are found.
+
+set -gx NPM_GLOBAL_BIN "$HOME/.local/bin"
+
+if not string match -q -- $NPM_GLOBAL_BIN $PATH
+  set -gx PATH "$NPM_GLOBAL_BIN" $PATH
+end
+EOF
+
+if [ $? -ne 0 ]; then
+    echo "❌ Failed to create npm.fish configuration. Aborting."
+    exit 1
+fi
+echo "npm.fish configuration created successfully."
+
+echo "--- Setup Complete! ---"
+echo "To activate the changes, please do ONE of the following:"
+echo "1. Open a new Fish shell terminal."
+echo "2. Run: 'source $FISH_CONFIG_DIR/config.fish' in your current Fish session."
+echo ""
+echo "--- Verification Steps ---"
+echo "After activating the changes, run these commands to verify:"
+echo "1. Verify npm prefix:         npm config get prefix"
+echo "   (Should show: '$NPM_GLOBAL_PREFIX')"
+echo "2. Install a global package:  npm install -g npm-check-updates"
+echo "3. Verify package executable: which ncu"
+echo "   (Should show: '$NPM_BIN_PATH/ncu')"
+echo ""
+EONPM
     fi
 fi
 ###############################################
@@ -104,8 +169,48 @@ fi
 ###############################################
 read -rp "Enable TLP, Powertop, fstrim & disable some services? [Y/N]: " power_opt
 if [[ $power_opt =~ ^[Yy]$ ]]; then
-  [[ -f power/tlp.conf ]] && cp power/tlp.conf /etc/tlp.conf
-  [[ -f power/powertop.service ]] && cp power/powertop.service /etc/systemd/system/
+  cat <<'EOF' > /etc/tlp.conf
+CPU_BOOST_ON_AC=1
+CPU_BOOST_ON_BAT=0
+CPU_ENERGY_PERF_POLICY_ON_AC=performance
+CPU_ENERGY_PERF_POLICY_ON_BAT=balance_performance
+CPU_HWP_DYN_BOOST_ON_AC=1
+CPU_HWP_DYN_BOOST_ON_BAT=0
+CPU_MAX_PERF_ON_AC=100
+CPU_MAX_PERF_ON_BAT=70
+CPU_MIN_PERF_ON_AC=0
+CPU_MIN_PERF_ON_BAT=0
+CPU_SCALING_GOVERNOR_ON_AC=performance
+CPU_SCALING_GOVERNOR_ON_BAT=powersave
+DISK_IDLE_SECS_ON_AC=30
+DISK_IDLE_SECS_ON_BAT=30
+PCIE_ASPM_ON_AC=powersupersave
+PCIE_ASPM_ON_BAT=powersupersave
+PLATFORM_PROFILE_ON_AC=performance
+PLATFORM_PROFILE_ON_BAT=balanced
+RUNTIME_PM_ON_AC=auto
+RUNTIME_PM_ON_BAT=auto
+SOUND_POWER_SAVE_ON_AC=0
+SOUND_POWER_SAVE_ON_BAT=10
+START_CHARGE_THRESH_BAT0=85
+STOP_CHARGE_THRESH_BAT0=90
+USB_AUTOSUSPEND=1
+WIFI_PWR_ON_AC=off
+WIFI_PWR_ON_BAT=on
+EOF
+  cat <<'EOF' > /etc/systemd/system/powertop.service
+[Unit]
+Description=Powertop auto-tune
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/powertop --auto-tune
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
   systemctl enable tlp powertop fstrim
   # disabling unnecessary ones
   for svc in remote-fs systemd-userdbd.socket system-journal-gatewayd.socket \
@@ -133,5 +238,10 @@ fi
 ###############################################
 # 9. Final Step
 ###############################################
-echo "All done. Rebooting now…"
+echo "All done."
+read -rp "Rebooting now? [Y/N]: " reboot_opt
+if [[ $reboot_opt =~ ^[Yy]$ ]]; then
 reboot
+else
+  echo "Remember to reboot to apply some changes!"
+fi
